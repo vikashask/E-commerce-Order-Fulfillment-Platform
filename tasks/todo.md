@@ -1,6 +1,6 @@
 # Commerce Platform Tasks
 
-- [ ] Task 1: Rebaseline documentation and replace the prototype classification.
+- [x] Task 1: Rebaseline documentation and replace the prototype classification.
 - [ ] Task 2: Build local infrastructure repository.
 - [ ] Task 3: Build contracts repository.
 - [ ] Task 4: Rebuild Catalog with NestJS and PostgreSQL.
