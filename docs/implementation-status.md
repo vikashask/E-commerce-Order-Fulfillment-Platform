@@ -2,13 +2,21 @@
 
 Last updated: 2026-10-28
 
-## Completed (verified locally)
+## Foundations (verified locally)
 
-- **Catalog service** (`services/commerce-catalog-service`, local Git repo)
-  - Product list (search, pagination, sort allowlist) and product detail, published-only.
-  - Validation with field-level 400 responses; safe 500 responses; request IDs; security headers.
-  - Liveness and readiness endpoints; graceful SIGTERM shutdown.
-  - Verified: `npm test` → 26 passed, 0 failed. Live server checked with curl (200, 400, 503 path covered by tests).
+- **Architecture documentation**
+  - Local multi-repository topology is accepted in ADR-001.
+  - Next.js/React frontend and NestJS/Node.js backend are accepted in ADR-002.
+
+## Prototype work (not accepted as a platform phase)
+
+- **Catalog prototype** (`services/commerce-catalog-service`, local Git repository)
+  - A dependency-free Node built-in HTTP server demonstrated public product list/detail behavior.
+  - `npm test` ran with 26 passing tests; live curl checks returned expected 200/400/readiness
+    responses and SIGTERM was observed.
+  - It is **not** the required implementation: it does not use NestJS or PostgreSQL, lacks
+    migrations/OpenAPI/contract repository integration, and has not built an image.
+  - It will be replaced by the Catalog NestJS/PostgreSQL task; do not treat it as Phase 4 complete.
 
 ## In progress
 
@@ -21,15 +29,13 @@ Last updated: 2026-10-28
 
 ## Not started (in planned order)
 
-1. Catalog → PostgreSQL adapter (`postgres:16` is available locally) with versioned migrations.
-2. Contracts repository: OpenAPI for Catalog; event schemas.
-3. Storefront (React + TypeScript) product browse/detail.
-4. Pricing and Cart services.
-5. Order service with idempotency, outbox, and Saga state.
-6. Kafka foundation (`apache/kafka:4.1.0` available locally) and Inventory, Payment, Fulfillment.
-7. Identity approach (decision required before protected behavior).
-8. Gateway, Read Model, Search, Notifications, returns/refunds.
-9. Independent deployment and rollback exercise.
+1. Infrastructure and contracts repositories.
+2. Catalog NestJS/PostgreSQL replacement plus first Next.js storefront slice.
+3. Pricing, Cart, Gateway, and Order.
+4. Kafka foundation, Inventory, Payment, and durable Saga workflow.
+5. Identity approach (decision required before protected behavior).
+6. Fulfillment, Read Model, Search, Notifications, returns/refunds, and operations UI.
+7. Independent deployment and rollback exercise.
 
 ## Open decisions
 
