@@ -11,8 +11,9 @@ Last updated: 2026-10-28
 ## Accepted services (verified locally)
 
 - **commerce-infra**: PostgreSQL 16 + Kafka 4.1 (KRaft) on an internal Docker network; both healthy.
-- **commerce-contracts**: Catalog OpenAPI 3.1 + event envelope schema; `npm test` 2/2.
-- **commerce-catalog-service** (NestJS + PostgreSQL, commit 1a97e32):
+- **commerce-contracts**: Catalog OpenAPI 3.1 v1.1.0 (matches implemented routes/params) + event envelope schema; `npm test` 3/3.
+- **commerce-catalog-service** (NestJS + PostgreSQL, commit 6af3f30):
+  - Step 1 gaps closed: `categories` and `product_media` tables (migration 002, additive), `GET /api/v1/categories`, `categoryId` filter, media on products, Prettier + type-aware ESLint in CI. `scripts/ci.sh` passed with 32/32 tests.
   - `scripts/ci.sh` passed: frozen install, strict typecheck, 27/27 tests on real PostgreSQL, build, image build.
   - Container run on the infra network: migrate (idempotent), dev seed (refused in production), API 200/400.
   - Failure drill: DB stopped -> live 200, ready 503, API 503 (no leaks); DB restored -> recovered with no restart; docker stop exit 0.
