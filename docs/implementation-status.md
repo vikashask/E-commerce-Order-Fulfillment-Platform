@@ -11,8 +11,12 @@ Last updated: 2026-10-28
 ## Accepted services (verified locally)
 
 - **commerce-infra**: PostgreSQL 16 + Kafka 4.1 (KRaft) on an internal Docker network; both healthy.
-- **commerce-contracts**: Catalog OpenAPI 3.1 v1.1.0 (matches implemented routes/params) + event envelope schema; `npm test` 3/3.
-- **commerce-catalog-service** (NestJS + PostgreSQL, commit 6af3f30):
+  - Fixed (commit 46f5c38): cluster ID was ignored (`CLUSTER_ID` is the variable the image reads) and broker data was not persisted (`KAFKA_LOG_DIRS` now points at the volume). Verified: a topic survives `--force-recreate`.
+- **commerce-contracts**: Catalog OpenAPI 3.1 v1.1.0, event envelope, `ProductPublished` v1 schema, topic catalogue (`events/topics.md`); `npm test` 4/4.
+- **commerce-catalog-service** (NestJS + PostgreSQL + Kafka, commit 852f5ae):
+  - Step 2 Kafka foundation (producer side): transactional outbox (migration 003), background relay with schema validation, idempotent producer, bounded retries, SKIP LOCKED, explicit topic creation; operator `publish-product` CLI. `scripts/ci.sh` passed with 44/44 tests on real PostgreSQL and Kafka.
+  - Deployed on the infra stack: CLI published the draft product, API returned it (200), outbox row `published`, message read from `commerce.catalog.product-published.v1` with Kafka's console consumer (key = productId).
+  - Not yet built: the consumer side (inbox deduplication, consumer retries, DLQ). It arrives with the first consuming service.
   - Step 1 gaps closed: `categories` and `product_media` tables (migration 002, additive), `GET /api/v1/categories`, `categoryId` filter, media on products, Prettier + type-aware ESLint in CI. `scripts/ci.sh` passed with 32/32 tests.
   - `scripts/ci.sh` passed: frozen install, strict typecheck, 27/27 tests on real PostgreSQL, build, image build.
   - Container run on the infra network: migrate (idempotent), dev seed (refused in production), API 200/400.

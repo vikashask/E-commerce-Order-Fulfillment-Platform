@@ -32,4 +32,4 @@ on real dependencies, build, image build. Run it before committing that service.
 |---|---|
 | `commerce-infra` | `docker compose --env-file .env config && docker compose --env-file .env up -d --wait` |
 | `commerce-contracts` | `npm test` |
-| `commerce-catalog-service` | `./scripts/ci.sh` (test DB on 127.0.0.1:55432) |
+| `commerce-catalog-service` | `./scripts/ci.sh` (test PostgreSQL 127.0.0.1:55432, test Kafka 127.0.0.1:59092) |
