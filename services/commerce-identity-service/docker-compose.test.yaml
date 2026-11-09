@@ -1,0 +1,16 @@
+name: identity-service-test
+services:
+  test-postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: identity_test
+    ports:
+      - "5500232:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U test -d identity_test"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+      start_period: 5s
